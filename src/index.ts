@@ -56,16 +56,12 @@ export const itemToNode = (feedItem: FeedItem, hashtag: string): PtnNode => {
   } else if (attachment?._ptr_media_type === "image") {
     text = `![](${attachment.url})`;
   } else if (attachment?._ptr_media_type === "audio") {
-    const title =
-      feedItem.content_text?.trim()?.length > 0
-        ? feedItem.content_text
-        : "Audio Recording";
+    const title = feedItem.content_text?.trim()?.length > 0 ? feedItem.content_text : "Audio Recording";
     text = `[${title}](${attachment.url})`;
   }
 
   text = `${text.trim()}`;
-  const validHashtag =
-    hashtag && typeof hashtag === "string" && hashtag.length > 0;
+  const validHashtag = hashtag && typeof hashtag === "string" && hashtag.length > 0;
   const existingTags = /#\w+to(roam|note)/;
   const needsNewTag = !!!text.match(existingTags)?.length;
 
