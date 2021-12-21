@@ -38,7 +38,7 @@ test("creates a node with a feed id", () => {
   };
 
   const node = itemToNode(feedItem, hashtag);
-  expect(node.itemId).toEqual(`${id}`);
+  expect(node.uid).toEqual(`${id}`);
 });
 
 test("renders image attachments in the body", () => {
