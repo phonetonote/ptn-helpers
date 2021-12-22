@@ -27,7 +27,6 @@ export type FeedItem = {
 export type PtnNode = {
   text: string;
   children: PtnNode[];
-  uid?: string;
 };
 
 export const itemToNode = (feedItem: FeedItem, hashtag: string): PtnNode => {
@@ -72,6 +71,5 @@ export const itemToNode = (feedItem: FeedItem, hashtag: string): PtnNode => {
   return {
     text: `${text}`,
     children: children,
-    uid: `${feedItem.id}`,
   };
 };

@@ -30,17 +30,6 @@ test("trims the text and adds the tag", () => {
   expect(node.children).toEqual([]);
 });
 
-test("creates a node with a feed id", () => {
-  const id = "123";
-  const feedItem = {
-    ...baseFeedItem,
-    id,
-  };
-
-  const node = itemToNode(feedItem, hashtag);
-  expect(node.uid).toEqual(`${id}`);
-});
-
 test("renders image attachments in the body", () => {
   const feedItem = {
     ...baseFeedItem,
