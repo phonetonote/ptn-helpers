@@ -52,6 +52,13 @@ export const itemToNode = (feedItem: FeedItem, hashtag: string): PtnNode => {
         });
       }
     });
+  } else if (attachment?._ptr_media_type === "text") {
+    if (attachment?.title?.length ?? 0 > 0) {
+      children.push({
+        text: `${attachment.title}`,
+        children: [],
+      });
+    }
   } else if (attachment?._ptr_media_type === "image") {
     text = `![](${attachment.url})`;
   } else if (attachment?._ptr_media_type === "audio") {

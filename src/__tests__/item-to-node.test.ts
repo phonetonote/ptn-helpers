@@ -30,6 +30,24 @@ test("trims the text and adds the tag", () => {
   expect(node.children).toEqual([]);
 });
 
+test("inserting a nested text attachment", () => {
+  const attachmentTitle = "an annotation";
+  const feedItem = {
+    ...baseFeedItem,
+    attachments: [
+      {
+        ...baseFeedAttachment,
+        _ptr_media_type: "text",
+        title: attachmentTitle,
+      },
+    ],
+  };
+
+  const node = itemToNode(feedItem, hashtag);
+
+  expect(node.children?.[0].text).toEqual(`${attachmentTitle}`);
+});
+
 test("renders image attachments in the body", () => {
   const feedItem = {
     ...baseFeedItem,
