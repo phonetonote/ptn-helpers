@@ -79,6 +79,6 @@ export const itemToNode = (feedItem: FeedItem, hashtag: string): PtnNode => {
   return {
     text: `${text}`,
     children: children,
-    uid: `ptn${feedItem.id}`,
+    uid: `${feedItem.id}`,
   };
 };
