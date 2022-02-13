@@ -96,14 +96,3 @@ test("inserts link metadata as children", () => {
   expect(node.children?.[0].text).toEqual(`![](${mediaUrl})`);
   expect(node.children?.[node.children?.length - 1].text).toEqual("open graph type:: article");
 });
-
-test("creates a node with a feed id prepended with ptn", () => {
-  const id = "123";
-  const feedItem = {
-    ...baseFeedItem,
-    id,
-  };
-
-  const node = itemToNode(feedItem, hashtag);
-  expect(node.uid).toEqual(`ptn${id}`);
-});
