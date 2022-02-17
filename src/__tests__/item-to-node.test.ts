@@ -4,7 +4,7 @@ const mediaUrl = "http://example.com/s3-bucket/file.jpg";
 const hashtag = "phonetoroam";
 
 export const baseFeedItem = {
-  id: "ptr-1",
+  id: "abc123",
   date_published: "2020-01-01T00:00:00.000Z",
   url: "http://example.com/",
   content_text: "  foo  ",
@@ -95,4 +95,15 @@ test("inserts link metadata as children", () => {
 
   expect(node.children?.[0].text).toEqual(`![](${mediaUrl})`);
   expect(node.children?.[node.children?.length - 1].text).toEqual("open graph type:: article");
+});
+
+test("creates a node with a feed id", () => {
+  const id = "new-id";
+  const feedItem = {
+    ...baseFeedItem,
+    id,
+  };
+
+  const node = itemToNode(feedItem, hashtag);
+  expect(node.uid).toEqual(`${id}`);
 });
