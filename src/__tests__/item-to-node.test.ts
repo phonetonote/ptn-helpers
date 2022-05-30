@@ -48,6 +48,31 @@ test("inserting a nested text attachment", () => {
   expect(node.children?.[0].text).toEqual(`${attachmentTitle}`);
 });
 
+test("inserting multiple text attachments", () => {
+  const attachmentTitle1 = "an annotation";
+  const attachmentTitle2 = "an argument";
+  const feedItem = {
+    ...baseFeedItem,
+    attachments: [
+      {
+        ...baseFeedAttachment,
+        _ptr_media_type: "text",
+        title: attachmentTitle1,
+      },
+      {
+        ...baseFeedAttachment,
+        _ptr_media_type: "text",
+        title: attachmentTitle2,
+      },
+    ],
+  };
+
+  const node = itemToNode(feedItem, hashtag);
+
+  expect(node.children?.[0].text).toEqual(`${attachmentTitle1}`);
+  expect(node.children?.[1].text).toEqual(`${attachmentTitle2}`);
+});
+
 test("renders image attachments in the body", () => {
   const feedItem = {
     ...baseFeedItem,

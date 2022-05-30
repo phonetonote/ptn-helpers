@@ -32,39 +32,48 @@ export type PtnNode = {
 
 export const itemToNode = (feedItem: FeedItem, hashtag: string): PtnNode => {
   const children: PtnNode[] = [];
-  const attachment = feedItem?.attachments?.[0];
-
   let text = feedItem?.content_text ?? "";
 
-  if (attachment?._ptr_media_type === "link") {
-    if (attachment?._ptr_open_graph_image_url?.length ?? 0 > 0) {
+  if ((feedItem?.attachments?.length ?? 0) > 1 && feedItem?.attachments?.[0]._ptr_media_type === "text") {
+    feedItem?.attachments?.forEach((element) => {
       children.push({
-        text: `![](${attachment["_ptr_open_graph_image_url"]})`,
+        text: element.title,
         children: [],
       });
-    }
+    });
+  } else {
+    const attachment = feedItem?.attachments?.[0];
 
-    FEED_LINK_KEYS.forEach((k: FeedLinkKey) => {
-      const v = attachment[k];
-      if (v?.length > 0) {
+    if (attachment?._ptr_media_type === "link") {
+      if (attachment?._ptr_open_graph_image_url?.length ?? 0 > 0) {
         children.push({
-          text: `${k.replace("_ptr_", "").replace(/_/g, " ")}:: ${v.trim()}`,
+          text: `![](${attachment["_ptr_open_graph_image_url"]})`,
           children: [],
         });
       }
-    });
-  } else if (attachment?._ptr_media_type === "text") {
-    if (attachment?.title?.length ?? 0 > 0) {
-      children.push({
-        text: `${attachment.title}`,
-        children: [],
+
+      FEED_LINK_KEYS.forEach((k: FeedLinkKey) => {
+        const v = attachment[k];
+        if (v?.length > 0) {
+          children.push({
+            text: `${k.replace("_ptr_", "").replace(/_/g, " ")}:: ${v.trim()}`,
+            children: [],
+          });
+        }
       });
+    } else if (attachment?._ptr_media_type === "text") {
+      if (attachment?.title?.length ?? 0 > 0) {
+        children.push({
+          text: `${attachment.title}`,
+          children: [],
+        });
+      }
+    } else if (attachment?._ptr_media_type === "image") {
+      text = `![](${attachment.url})`;
+    } else if (attachment?._ptr_media_type === "audio") {
+      const title = feedItem.content_text?.trim()?.length > 0 ? feedItem.content_text : "Audio Recording";
+      text = `[${title}](${attachment.url})`;
     }
-  } else if (attachment?._ptr_media_type === "image") {
-    text = `![](${attachment.url})`;
-  } else if (attachment?._ptr_media_type === "audio") {
-    const title = feedItem.content_text?.trim()?.length > 0 ? feedItem.content_text : "Audio Recording";
-    text = `[${title}](${attachment.url})`;
   }
 
   text = `${text.trim()}`;
