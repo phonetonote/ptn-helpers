@@ -91,3 +91,29 @@ export const itemToNode = (feedItem: FeedItem, hashtag: string): PtnNode => {
     uid: feedItem.id,
   };
 };
+
+import { format } from "date-fns";
+
+export const organizeFeedItems = (
+  feedItems: FeedItem[],
+  dateFormat: string = "MMMM do, yyyy"
+): Record<string, Record<string, FeedItem[]>> => {
+  const reduceFeedItems = (obj: Record<string, Record<string, FeedItem[]>>, feedItem: FeedItem) => {
+    const date = new Date(feedItem.date_published),
+      pageName = format(date, dateFormat),
+      senderType = feedItem._ptr_sender_type;
+
+    if (!obj.hasOwnProperty(pageName)) {
+      obj[pageName] = {};
+    }
+
+    if (!obj[pageName][senderType]) {
+      obj[pageName][senderType] = [];
+    }
+
+    obj[pageName][senderType].push(feedItem);
+    return obj;
+  };
+
+  return feedItems.reduce(reduceFeedItems, {});
+};
