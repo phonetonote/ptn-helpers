@@ -127,6 +127,31 @@ test("links to audio with a default link title", () => {
   expect(node.children).toEqual([]);
 });
 
+test("links to documents with their title", () => {
+  const attachmentTitle = "foo.txt";
+  const feedItem = {
+    ...baseFeedItem,
+    attachments: [{ ...baseFeedAttachment, _ptr_media_type: "document", url: mediaUrl, title: attachmentTitle }],
+    content_text: "  ",
+  };
+
+  const node = itemToNode(feedItem, hashtag);
+  expect(node.text).toEqual(`[${attachmentTitle}](${mediaUrl}) #phonetonote`);
+  expect(node.children).toEqual([]);
+});
+
+test("links to documents without a title", () => {
+  const feedItem = {
+    ...baseFeedItem,
+    attachments: [{ ...baseFeedAttachment, _ptr_media_type: "document", url: mediaUrl, title: undefined }],
+    content_text: "  ",
+  };
+
+  const node = itemToNode(feedItem, hashtag);
+  expect(node.text).toEqual(`[document attachment](${mediaUrl}) #phonetonote`);
+  expect(node.children).toEqual([]);
+});
+
 test("inserts link metadata as children", () => {
   const feedItem = {
     ...baseFeedItem,
