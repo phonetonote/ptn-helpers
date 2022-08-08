@@ -1,7 +1,7 @@
 import { itemToNode } from "../index";
 
 const mediaUrl = "http://example.com/s3-bucket/file.jpg";
-const hashtag = "phonetoroam";
+const hashtag = "phonetonote";
 
 export const baseFeedItem = {
   id: "abc123",
@@ -26,7 +26,7 @@ test("trims the text and adds the tag", () => {
   };
 
   const node = itemToNode(feedItem, hashtag);
-  expect(node.text).toEqual("foo #phonetoroam");
+  expect(node.text).toEqual("foo #phonetonote");
   expect(node.children).toEqual([]);
 });
 
@@ -74,6 +74,7 @@ test("inserting multiple text attachments", () => {
 });
 
 test("renders image attachments in the body", () => {
+  const imageCaption = "";
   const feedItem = {
     ...baseFeedItem,
     attachments: [
@@ -81,6 +82,7 @@ test("renders image attachments in the body", () => {
         ...baseFeedAttachment,
         _ptr_media_type: "image",
         url: mediaUrl,
+        title: imageCaption,
       },
     ],
     body: "",
@@ -88,8 +90,29 @@ test("renders image attachments in the body", () => {
   };
 
   const node = itemToNode(feedItem, hashtag);
-  expect(node.text).toEqual(`![](${mediaUrl}) #phonetoroam`);
+  expect(node.text).toEqual(`![](${mediaUrl}) #phonetonote`);
   expect(node.children).toEqual([]);
+});
+
+test("renders image captions as children", () => {
+  const imageCaption = "an image";
+  const feedItem = {
+    ...baseFeedItem,
+    attachments: [
+      {
+        ...baseFeedAttachment,
+        _ptr_media_type: "image",
+        url: mediaUrl,
+        title: imageCaption,
+      },
+    ],
+    body: "",
+    text: "",
+  };
+
+  const node = itemToNode(feedItem, hashtag);
+  expect(node.text).toEqual(`![](${mediaUrl}) #phonetonote`);
+  expect(node.children).toEqual([{ text: imageCaption, children: [] }]);
 });
 
 test("links to audio with a default link title", () => {
@@ -100,7 +123,7 @@ test("links to audio with a default link title", () => {
   };
 
   const node = itemToNode(feedItem, hashtag);
-  expect(node.text).toEqual(`[Audio Recording](${mediaUrl}) #phonetoroam`);
+  expect(node.text).toEqual(`[Audio Recording](${mediaUrl}) #phonetonote`);
   expect(node.children).toEqual([]);
 });
 

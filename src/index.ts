@@ -70,6 +70,14 @@ export const itemToNode = (feedItem: FeedItem, hashtag: string): PtnNode => {
       }
     } else if (attachment?._ptr_media_type === "image") {
       text = `![](${attachment.url})`;
+
+      // this is captions
+      if (attachment?.title?.length ?? 0 > 0) {
+        children.push({
+          text: `${attachment.title}`,
+          children: [],
+        });
+      }
     } else if (attachment?._ptr_media_type === "audio") {
       const title = feedItem.content_text?.trim()?.length > 0 ? feedItem.content_text : "Audio Recording";
       text = `[${title}](${attachment.url})`;
