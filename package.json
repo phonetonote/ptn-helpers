@@ -1,6 +1,6 @@
 {
   "name": "ptn-helpers",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "type": "module",
   "description": "helper functions to fetch and display ptn data",
   "main": "lib/index.js",
