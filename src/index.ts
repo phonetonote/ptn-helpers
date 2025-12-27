@@ -7,7 +7,7 @@ export const FEED_LINK_KEYS = [
   "_ptr_open_graph_type",
 ];
 
-export type FeedLinkKey = typeof FEED_LINK_KEYS[number];
+export type FeedLinkKey = (typeof FEED_LINK_KEYS)[number];
 export type FeedAttachment = {
   [feedLinkKey in FeedLinkKey]?: string | undefined;
 } & {
@@ -88,7 +88,7 @@ export const itemToNode = (feedItem: FeedItem, hashtag: string): PtnNode => {
   text = `${text.trim()}`;
   const validHashtag = hashtag && typeof hashtag === "string" && hashtag.length > 0;
   const existingTags = /#\w+to(roam|note)/;
-  const needsNewTag = !!!text.match(existingTags)?.length;
+  const needsNewTag = !text.match(existingTags)?.length;
 
   if (validHashtag && needsNewTag) {
     text = `${text} #${hashtag}`;
@@ -103,14 +103,14 @@ export const itemToNode = (feedItem: FeedItem, hashtag: string): PtnNode => {
 
 export const organizeFeedItems = (
   feedItems: FeedItem[],
-  dateFormat: string = "MMMM do, yyyy"
+  dateFormat: string = "MMMM do, yyyy",
 ): Record<string, Record<string, FeedItem[]>> => {
   const reduceFeedItems = (obj: Record<string, Record<string, FeedItem[]>>, feedItem: FeedItem) => {
     const date = new Date(feedItem.date_published),
       pageName = format(date, dateFormat),
       senderType = feedItem._ptr_sender_type;
 
-    if (!obj.hasOwnProperty(pageName)) {
+    if (!Object.hasOwn(obj, pageName)) {
       obj[pageName] = {};
     }
 
